@@ -133,15 +133,6 @@ estimator.fit({
 
 ---
 
-## 📌 Resume-Worthy Highlights
-
-- **Designed & deployed an end-to-end ML pipeline on AWS**  
-  (S3 → Glue → Athena → SageMaker)
-- **Trained a regression model with XGBoost** to predict NYC taxi ETAs with production-level performance
-- **Built interactive dashboards** (Tableau / Superset) to monitor model performance
-
----
-
 ## 🛠 Future Improvements
 
 - Integrate **real-time inference** via SageMaker Endpoint + Lambda + API Gateway
