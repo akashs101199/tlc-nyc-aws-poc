@@ -1,10 +1,9 @@
 # 🚖 NYC Taxi ETA Prediction – End-to-End AWS ML Pipeline (POC)
 
-<img width="1883" height="222" alt="image" src="https://github.com/user-attachments/assets/816b2fba-d360-4e1e-8577-19b62863743b" />
-
+<img width="1883" height="222" alt="architecture" src="https://github.com/user-attachments/assets/816b2fba-d360-4e1e-8577-19b62863743b" />
 
 ## 📌 Project Overview
-This project builds an **end-to-end machine learning pipeline** to predict **Estimated Time of Arrival (ETA)** for NYC Yellow Taxi trips using AWS services.  
+This project builds an **end-to-end machine learning pipeline** to predict **Estimated Time of Arrival (ETA)** for NYC Yellow Taxi trips using **AWS services**.
 
 It demonstrates how to:
 - Ingest raw parquet data from **Amazon S3**
@@ -14,7 +13,7 @@ It demonstrates how to:
 - Evaluate model performance (MAE) and generate error samples
 - Visualize results with Tableau / Superset
 
-This POC follows **production-grade design principles** for data pipelines, scalability, and reproducibility.
+This POC follows **production-grade design principles** for scalability, automation, and reproducibility.
 
 ---
 
@@ -47,23 +46,32 @@ This POC follows **production-grade design principles** for data pipelines, scal
 ## 📂 Project Workflow
 
 ### 1️⃣ Data Ingestion
-- NYC Yellow Taxi data (`yellow_tripdata_YYYY-MM.parquet`) uploaded to S3.
-- Glue crawler runs and updates schema in Glue Data Catalog.
+- Upload NYC Yellow Taxi data (`yellow_tripdata_YYYY-MM.parquet`) to **S3**.
+- Run **AWS Glue Crawler** to infer schema and store in **Glue Data Catalog**.
 
 ### 2️⃣ Data Exploration
-- Athena queries used to explore data distribution, check nulls, and validate schema.
+- Query with **Amazon Athena** to:
+  - Validate schema
+  - Inspect row counts, nulls
+  - Perform initial feature profiling
 
 ### 3️⃣ Feature Engineering & Preprocessing
 - Convert timestamps to `datetime`
-- Compute trip duration in minutes
-- Filter outliers (duration < 1 min or > 2 hrs, negative fares)
-- Derive features: `hour`, `weekday`, `is_airport`, `has_congestion_fee`
+- Compute **trip duration (minutes)**
+- Filter outliers: duration < 1 min or > 2 hrs, negative fares
+- Derive features:
+  - `hour`
+  - `weekday`
+  - `is_airport`
+  - `has_congestion_fee`
 
 ### 4️⃣ Train/Validation Split
-- 80/20 split, label-first CSV format (no headers) for XGBoost.
-- Uploaded to S3 under `derived/eta_poc/train/` and `val/`.
+- Create **80/20 split**, label-first CSV (no headers) for XGBoost.
+- Upload to S3 under:
+  - `derived/eta_poc/train/`
+  - `derived/eta_poc/val/`
 
-### 5️⃣ Model Training
+### 5️⃣ Model Training (Managed XGBoost)
 
 ```python
 from sagemaker import image_uris
@@ -91,18 +99,15 @@ estimator.fit({
     "train": TrainingInput(train_s3_uri, content_type="text/csv"),
     "validation": TrainingInput(val_s3_uri, content_type="text/csv"),
 })
+```
 
 ### 6️⃣ Model Evaluation (Local)
-
 - **Download** `model.tar.gz` from S3  
 - **Extract & Load** with `xgboost.Booster`  
-- **Compute** Mean Absolute Error (MAE) on the validation set  
+- **Compute** Mean Absolute Error (MAE) on validation set  
 - **Generate** error sample CSV (`eta_errors_model_sample.csv`) for visualization  
 
----
-
-## 7️⃣ Visualization
-
+### 7️⃣ Visualization
 - Load `eta_errors_model_sample.csv` into **Tableau** or **Apache Superset**
 - Build dashboards for:
   - **Actual vs Predicted ETA**
@@ -114,7 +119,7 @@ estimator.fit({
 ## 📊 Key Metrics
 
 - **Train/Validation Size:** `96k / 24k`
-- **Evaluation Metric:** Mean Absolute Error (MAE) in minutes
+- **Evaluation Metric:** Mean Absolute Error (MAE)
 - **Baseline MAE (median binning):** ~`X.XX min`
 - **Model MAE:** ~`Y.YY min` (**Z% improvement** over baseline)
 
@@ -123,7 +128,7 @@ estimator.fit({
 ## 🚀 Deployment & Scaling
 
 - Extendable to **real-time inference** with **SageMaker Endpoints**
-- Scales to multi-GB datasets using **SageMaker Processing** & **distributed training**
+- Scales to **multi-GB datasets** using **SageMaker Processing** & distributed training
 - **AWS Glue Workflows** can be scheduled for **automated retraining pipelines**
 
 ---
@@ -132,14 +137,14 @@ estimator.fit({
 
 - **Designed & deployed an end-to-end ML pipeline on AWS**  
   (S3 → Glue → Athena → SageMaker)
-- **Trained a regression model with XGBoost** to predict NYC taxi trip ETAs, achieving production-ready performance
-- **Built interactive dashboards** (Tableau/Superset) for data exploration and model performance monitoring
+- **Trained a regression model with XGBoost** to predict NYC taxi ETAs with production-level performance
+- **Built interactive dashboards** (Tableau / Superset) to monitor model performance
 
 ---
 
 ## 🛠 Future Improvements
 
-- Integrate **real-time inference** via **SageMaker Endpoint + Lambda + API Gateway**
+- Integrate **real-time inference** via SageMaker Endpoint + Lambda + API Gateway
 - Add **CI/CD pipeline** for automated retraining
 - Deploy **Superset / QuickSight dashboards** as shareable web apps
 
