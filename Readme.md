@@ -92,7 +92,7 @@ estimator.fit({
     "validation": TrainingInput(val_s3_uri, content_type="text/csv"),
 })
 
-## 6️⃣ Model Evaluation (Local)
+### 6️⃣ Model Evaluation (Local)
 
 - **Download** `model.tar.gz` from S3  
 - **Extract & Load** with `xgboost.Booster`  
