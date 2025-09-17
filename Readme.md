@@ -1,6 +1,7 @@
 # 🚖 NYC Taxi ETA Prediction – End-to-End AWS ML Pipeline (POC)
 
-![Architecture](https://your-s3-bucket/nyc_taxi_poc_architecture.png)
+<img width="1883" height="222" alt="image" src="https://github.com/user-attachments/assets/816b2fba-d360-4e1e-8577-19b62863743b" />
+
 
 ## 📌 Project Overview
 This project builds an **end-to-end machine learning pipeline** to predict **Estimated Time of Arrival (ETA)** for NYC Yellow Taxi trips using AWS services.  
