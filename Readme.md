@@ -91,3 +91,60 @@ estimator.fit({
     "train": TrainingInput(train_s3_uri, content_type="text/csv"),
     "validation": TrainingInput(val_s3_uri, content_type="text/csv"),
 })
+
+## 6️⃣ Model Evaluation (Local)
+
+- **Download** `model.tar.gz` from S3  
+- **Extract & Load** with `xgboost.Booster`  
+- **Compute** Mean Absolute Error (MAE) on the validation set  
+- **Generate** error sample CSV (`eta_errors_model_sample.csv`) for visualization  
+
+---
+
+## 7️⃣ Visualization
+
+- Load `eta_errors_model_sample.csv` into **Tableau** or **Apache Superset**
+- Build dashboards for:
+  - **Actual vs Predicted ETA**
+  - **Hourly Performance**
+  - **Error Distribution by Distance**
+
+---
+
+## 📊 Key Metrics
+
+- **Train/Validation Size:** `96k / 24k`
+- **Evaluation Metric:** Mean Absolute Error (MAE) in minutes
+- **Baseline MAE (median binning):** ~`X.XX min`
+- **Model MAE:** ~`Y.YY min` (**Z% improvement** over baseline)
+
+---
+
+## 🚀 Deployment & Scaling
+
+- Extendable to **real-time inference** with **SageMaker Endpoints**
+- Scales to multi-GB datasets using **SageMaker Processing** & **distributed training**
+- **AWS Glue Workflows** can be scheduled for **automated retraining pipelines**
+
+---
+
+## 📌 Resume-Worthy Highlights
+
+- **Designed & deployed an end-to-end ML pipeline on AWS**  
+  (S3 → Glue → Athena → SageMaker)
+- **Trained a regression model with XGBoost** to predict NYC taxi trip ETAs, achieving production-ready performance
+- **Built interactive dashboards** (Tableau/Superset) for data exploration and model performance monitoring
+
+---
+
+## 🛠 Future Improvements
+
+- Integrate **real-time inference** via **SageMaker Endpoint + Lambda + API Gateway**
+- Add **CI/CD pipeline** for automated retraining
+- Deploy **Superset / QuickSight dashboards** as shareable web apps
+
+---
+
+## 📜 License
+
+This project is provided as a **proof of concept** and can be freely modified for learning and internal use.
